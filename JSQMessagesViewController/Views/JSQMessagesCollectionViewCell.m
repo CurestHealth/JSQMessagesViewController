@@ -61,6 +61,7 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
 @property (assign, nonatomic) CGSize avatarViewSize;
 
 @property (weak, nonatomic, readwrite) UITapGestureRecognizer *tapGestureRecognizer;
+@property (weak, nonatomic, readwrite) UITapGestureRecognizer *mediaTapGestureRecognizer;
 
 - (void)jsq_handleTapGesture:(UITapGestureRecognizer *)tap;
 
@@ -127,10 +128,13 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
     self.cellBottomLabel.font = [UIFont systemFontOfSize:11.0f];
     self.cellBottomLabel.textColor = [UIColor lightGrayColor];
 
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(jsq_handleTapGesture:)];
-    [self addGestureRecognizer:tap];
-    [self.textView addGestureRecognizer:tap];
-    self.tapGestureRecognizer = tap;
+    UITapGestureRecognizer *tapMessage = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(jsq_handleTapGesture:)];
+    UITapGestureRecognizer *tapMedia = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(jsq_handleTapGesture:)];
+    [self addGestureRecognizer:tapMedia];
+    [self.textView addGestureRecognizer:tapMessage];
+    [self.mediaView addGestureRecognizer:tapMedia];
+    self.tapGestureRecognizer = tapMessage;
+    self.mediaTapGestureRecognizer = tapMedia;
 }
 
 - (void)dealloc
@@ -149,6 +153,8 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
 
     [_tapGestureRecognizer removeTarget:nil action:NULL];
     _tapGestureRecognizer = nil;
+    [_mediaTapGestureRecognizer removeTarget:nil action:NULL];
+    _mediaTapGestureRecognizer = nil;
 }
 
 #pragma mark - Collection view cell
